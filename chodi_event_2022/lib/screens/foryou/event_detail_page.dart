@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chodi_app/models/event.dart';
+import 'package:flutter_chodi_app/screens/impact/impact_screen.dart';
 import 'package:flutter_chodi_app/widget/share_modal.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -15,6 +16,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'qr_generator.dart';
 
 import '../../services/firebase_authentication_service.dart';
 
@@ -95,22 +97,20 @@ class event_detail_page_state extends State<event_detail_page> {
   }
 
   void _launchMaps() async {
-    String address = '${widget.ngoEvent.address} ${widget.ngoEvent.city}, ${widget.ngoEvent.state}';
-    final Uri googleMapsURL = Uri.parse('https://www.google.com/maps/dir/Current+Location/${address}');
+    String address =
+        '${widget.ngoEvent.address} ${widget.ngoEvent.city}, ${widget.ngoEvent.state}';
+    final Uri googleMapsURL = Uri.parse(
+        'https://www.google.com/maps/dir/Current+Location/${address}');
     // final Uri googleMapsURL = Uri.parse('comgooglemaps://?center=${widget.ngoEvent.locationHelp}');
     // final Uri appleMapsURL = Uri.parse('http://maps.apple.com/?saddr=Current+Location&daddr=${address}');
-    final Uri appleMapsURL = Uri.parse('https://maps.apple.com/?q=${widget.ngoEvent.locationHelp}');
+    final Uri appleMapsURL =
+        Uri.parse('https://maps.apple.com/?q=${widget.ngoEvent.locationHelp}');
 
-    if (await canLaunchUrl(googleMapsURL)) 
-    {
+    if (await canLaunchUrl(googleMapsURL)) {
       await launchUrl(googleMapsURL);
-    } 
-    else if (await canLaunchUrl(appleMapsURL))
-    {
+    } else if (await canLaunchUrl(appleMapsURL)) {
       await launchUrl(appleMapsURL);
-    }
-    else
-    {
+    } else {
       throw "Could Not Launch Map Application.";
     }
   }
@@ -435,23 +435,28 @@ class event_detail_page_state extends State<event_detail_page> {
                         style: const TextStyle(fontSize: 15)),
                     const SizedBox(height: 30),
                     const Text('Location', style: TextStyle(fontSize: 20)),
+
                     const SizedBox(height: 10),
-                          InkWell( // MAP FUNCTIONALITY...
-                            onTap: _launchMaps,
-                            child: Row(children: [
-                              IconButton(
-                                icon: const Icon(Icons.location_on_outlined, color: Colors.blue),
-                                alignment: Alignment.topLeft,
-                                onPressed: _launchMaps),
-                              Text(
-                                '${widget.ngoEvent.address}\n${widget.ngoEvent.city}, ${widget.ngoEvent.state}\n${widget.ngoEvent.zip}\n${widget.ngoEvent.country}',
-                                style: const TextStyle(fontSize: 15, color: Colors.blue))
-                            ])
-                          ),
+                    InkWell(
+                        // MAP FUNCTIONALITY...
+                        onTap: _launchMaps,
+                        child: Row(children: [
+                          IconButton(
+                              icon: const Icon(Icons.location_on_outlined,
+                                  color: Colors.blue),
+                              alignment: Alignment.topLeft,
+                              onPressed: _launchMaps),
+                          Text(
+                              '${widget.ngoEvent.address}\n${widget.ngoEvent.city}, ${widget.ngoEvent.state}\n${widget.ngoEvent.zip}\n${widget.ngoEvent.country}',
+                              style: const TextStyle(
+                                  fontSize: 15, color: Colors.blue))
+                        ])),
+
                     const SizedBox(height: 30),
                     const Text('Notes', style: TextStyle(fontSize: 20)),
                     const SizedBox(height: 10),
-                    Text('[${widget.ngoEvent.locationHelp.split(',')[0]}°N, ${widget.ngoEvent.locationHelp.split(',')[1]}°W]',
+                    Text(
+                        '[${widget.ngoEvent.locationHelp.split(',')[0]}°N, ${widget.ngoEvent.locationHelp.split(',')[1]}°W]',
                         maxLines: descTextShowFlag2 ? 200 : 5,
                         textAlign: TextAlign.start),
                     InkWell(
@@ -476,6 +481,36 @@ class event_detail_page_state extends State<event_detail_page> {
                       ),
                     ),
                     const SizedBox(height: 10),
+
+                    // Register button
+                    const SizedBox(height: 10),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => QrGeneratorPage(
+                                  url:widget.ngoEvent.qrCodeURL, name:widget.ngoEvent.orgName, description:widget.ngoEvent.description, startDate:widget.ngoEvent.startTime, endDate:widget.ngoEvent.endTime, address:widget.ngoEvent.address, locationDescription: widget.ngoEvent.locationDescription, state: widget.ngoEvent.state, zip: widget.ngoEvent.zip, country: widget.ngoEvent.country)), // navigate to the qr_generator.dart page
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.qr_code_outlined,
+                                color: Colors
+                                    .blue), // use a QR code icon
+                            alignment: Alignment.topLeft,
+                            onPressed: null,
+                          ),
+                          Text(
+                            'Register', // update the text
+                            style: const TextStyle(
+                                fontSize: 15, color: Colors.blue),
+                          ),
+                        ],
+                      ),
+                    ),
+
                     /*
                     Column(
                       children: <Widget>[

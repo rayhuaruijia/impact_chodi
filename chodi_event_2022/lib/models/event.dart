@@ -28,6 +28,7 @@ class Event {
   String imageURL;
   String description;
   String eventType;
+  String qrCodeURL;
 
   Timestamp startTime;
   Timestamp endTime;
@@ -55,6 +56,7 @@ class Event {
     required this.eventType,
     required this.startTime,
     required this.endTime,
+    required this.qrCodeURL,
     //this.notes,
     //required this.availableSpace,
     required this.totalSpace,
@@ -107,15 +109,18 @@ class Event {
       state: "CA",
       country: "USA",
       address: "PO Box 941",
-      locationDescription: "San Martin, CA",
+      locationDescription: "San Martin",
       locationHelp: '${firstCoordinate},${secondCoordinate}',
       attendees: {},
       imageURL: data['imageURL'] ?? '',
       // imageURL: "gs://chodi-663f2.appspot.com/nonprofitlogos/81-2661626.jpg",
-      description: "We are a 501(c)3 non-profit all volunteer rescue organization focused on physically rescuing and reuniting lost/found animals within our community.  We provide medical assistance and care to the injured, abused, neglected, abandoned and underaged animals.  We also rescue at-risk animals from local shelters. For the animals that come into our rescue, they are placed in safe, nurturing foster homes to prepare them for adoption.  We are dedicated to match each and every animal with the very best forever home.",
+      description:
+          "We are a 501(c)3 non-profit all volunteer rescue organization focused on physically rescuing and reuniting lost/found animals within our community.  We provide medical assistance and care to the injured, abused, neglected, abandoned and underaged animals.  We also rescue at-risk animals from local shelters. For the animals that come into our rescue, they are placed in safe, nurturing foster homes to prepare them for adoption.  We are dedicated to match each and every animal with the very best forever home.",
       eventType: "Adopting",
       startTime: Timestamp.fromDate(DateTime.now()),
       endTime: Timestamp.fromDate(DateTime.now()),
+      qrCodeURL:
+          "https://docs.google.com/forms/d/e/1FAIpQLSdYIpFxnEff8QN1QC7kLXNH3UMdI6sygcLKGdpGT0k0cAVOFA/viewform?usp=sf_link",
       //    notes: data['Notes'] ?? '',
       //availableSpace: data['totalSpaceTaken'] ?? 0,
       totalSpace: 3,

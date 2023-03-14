@@ -102,7 +102,7 @@ class event_detail_page_state extends State<event_detail_page> {
     // final Uri googleMapsURL = Uri.parse('comgooglemaps://?center=${widget.ngoEvent.locationHelp}');
     final Uri appleMapsURL = Uri.parse('http://maps.apple.com/?daddr=${address}&dirflg=d');
     // final Uri appleMapsURL = Uri.parse('http://maps.apple.com/?saddr=Current+Location&daddr=${address}');
-    final Uri appleMapsURL = Uri.parse('https://maps.apple.com/?q=${widget.ngoEvent.locationHelp}');
+    // final Uri appleMapsURL = Uri.parse('https://maps.apple.com/?q=${widget.ngoEvent.locationHelp}');
 
     if (await canLaunchUrl(googleMapsURL)) 
     {
